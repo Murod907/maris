@@ -211,7 +211,7 @@ function AdminPanel() {
       </div>
 
       <div style={{ display: "flex", borderBottom: "1px solid #1e3a55" }}>
-        {["match", "teams"].map((t) => ([23.06.2026 16:38] Murod: <button
+        {["match", "teams"].map((t) => ( <button
             key={t}
             onClick={() => setTab(t)}
             style={{
