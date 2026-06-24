@@ -283,7 +283,7 @@ function AdminPanel() {
                     <button onClick={() => deleteMatch(m.id)} style={{ background: "#2a4060", color: "#e74c3c", border: "none", borderRadius: 6, padding: "4px 10px", fontSize: 11, cursor: "pointer", fontWeight: 700 }}>
                       🗑️
                     </button>
-     </div>
+     </>
  </div>
               ))}
 
