@@ -47,7 +47,7 @@ export default function PublicApp() {
       <div style={{ maxWidth: 900, margin: "0 auto", padding: 16 }}>
         <div
           style={{
-            background: "linear-gradient(135deg, #0f2235 0%, #132840 50%, #0f2235 100%)",
+            background: "linear-gradient(135deg, #EOF2FE 0%, #FFFFFF 50%, #F3F4F6 100%)",
             border: "1px solid #1e3a55",
             borderRadius: 12,
             padding: "16px 24px",
@@ -61,7 +61,7 @@ export default function PublicApp() {
         >
           <div>
             <div style={{ color: "#E8F0F8", fontWeight: 900, fontSize: 20 }}>⛰️ Bolodala Super Liga</div>
-            <div style={{ color: "#4a7090", fontSize: 12, marginTop: 2 }}>Boʻstonliq tumani • 2026 Mavsumi</div>
+            <div style={{ color: "#4a7090", fontSize: 12, marginTop: 2 }}> BOLODALA SUPER LIGA • 2026 Mavsumi</div>
           </div>
           <div style={{ display: "flex", gap: 16, textAlign: "center" }}>
             <div>
