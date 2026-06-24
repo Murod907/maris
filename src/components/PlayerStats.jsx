@@ -106,23 +106,23 @@ export default function PlayerStats({ allMatchPlayers, matches, teams }) {
  return (
     <div>
       <StatCard title="⚽ TOP UROVCHILAR" emptyText="Hozircha gol urilmagan" children={topScorers.map((p, i) => (
-        <Row key={p.name} rank={i + 1} name={p.name} sub={'${p.apps} o'yin'} badgeValue={p.goals} badgeColor={getRatingColor(p.avgRating)} />
+        <Row key={p.name} rank={i + 1} name={p.name} sub={`${p.apps} o'yin`} badgeValue={p.goals} badgeColor={getRatingColor(p.avgRating)} />
       ))} />
 
       <StatCard title="🎯 ASSISTENTLAR" emptyText="Hozircha assist berilmagan" children={topAssisters.map((p, i) => (
-        <Row key={p.name} rank={i + 1} name={p.name} sub={'${p.apps} o'yin'} badgeValue={p.assists} badgeColor={getRatingColor(p.avgRating)} />
+        <Row key={p.name} rank={i + 1} name={p.name} sub={`${p.apps} o'yin`} badgeValue={p.assists} badgeColor={getRatingColor(p.avgRating)} />
       ))} />
 
       <StatCard title="⭐ ENG YUQORI OʻRTACHA BALL" emptyText="Hozircha ma'lumot yo'q" children={topRated.map((p, i) => (
-        <Row key={p.name} rank={i + 1} name={p.name} sub${p.apps} o'yin} badgeValue={p.avgRating.toFixed(1)} badgeColor={getRatingColor(p.avgRating)} />
+        <Row key={p.name} rank={i + 1} name={p.name} sub={`${p.apps} o'yin`} badgeValue={p.avgRating.toFixed(1)} badgeColor={getRatingColor(p.avgRating)} />
       ))} />
 
       <StatCard title="🛡️ ENG KOʻP QURUQ OʻYIN" emptyText="Hozircha quruq o'yin yo'q" children={topCleanSheets.map((t, i) => (
-        <Row key={t.name} rank={i + 1} name={${t.logo} ${t.name}} badgeValue={t.cleanSheets} badgeColor="#7a9bb5" />
+        <Row key={t.name} rank={i + 1} name={`${t.logo} ${t.name}`} badgeValue={t.cleanSheets} badgeColor="#7a9bb5" />
       ))} />
 
       <StatCard title="🏆 ENG YUQORI OʻRTACHA BALLGA EGA JAMOA" emptyText="Hozircha ma'lumot yo'q" children={topTeamRating.map((t, i) => (
-        <Row key={t.name} rank={i + 1} name={${t.logo} ${t.name}} badgeValue={t.avg.toFixed(1)} badgeColor={getRatingColor(t.avg)} />
+        <Row key={t.name} rank={i + 1} name={`${t.logo} ${t.name}`} badgeValue={t.avg.toFixed(1)} badgeColor={getRatingColor(t.avg)} />
       ))} />
     </div>
   );
