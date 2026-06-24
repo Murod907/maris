@@ -284,8 +284,8 @@ function AdminPanel() {
                       🗑️
                     </button>
      </>
- </div>
-              ))}
+ <div>
+   {((
 
                <div style={{ color: "#7a9bb5", fontSize: 11, fontWeight: 700, marginBottom: 8, marginTop: 16 }}>TUGAGAN O'YINLAR</div>
               {matches.filter((m) => m.status === "finished").length === 0 && (
