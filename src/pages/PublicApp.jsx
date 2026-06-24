@@ -116,9 +116,9 @@ export default function PublicApp() {
 
         {!loading && view === "table" && <StandingsTable teams={teams} />}
 
-        {!loading && view === "stats" && <PlayerStats allMatchPlayers={allMatchPlayers} />}
+        {!loading && view === "stats" && <PlayerStats allMatchPlayers={allMatchPlayers} matches={matches} teams={teams} />}
       </div>
-
+      
       {selectedMatch && (
         <MatchDetail match={selectedMatch} players={selectedMatchPlayers} onClose={() => setSelectedMatch(null)} />
       )}
