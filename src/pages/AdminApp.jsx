@@ -133,8 +133,6 @@ function AdminPanel() {
       alert("Sana va ikkala jamoani tanlang");
       return;
     }
-      return;
-    }
     if (form.home_team === form.away_team) {
       alert("Bir xil jamoani tanlab bo'lmaydi");
       return;
