@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"; // Kichik harfga o'tkazildi
 import { supabase } from "../supabaseClient";
 import { recalculateStandings } from "../lib/helpers";
 import TopBar from "../components/TopBar";
@@ -15,15 +15,7 @@ const inputStyle = {
   outline: "none",
   boxSizing: "border-box",
 };
-
-const labelStyle = { 
-  color: "#7a9bb5", 
-  fontSize: 11, 
-  fontWeight: 700, 
-  letterSpacing: 0.5, 
-  marginBottom: 4, 
-  display: "block" 
-};
+const labelStyle = { color: "#7a9bb5", fontSize: 11, fontWeight: 700, letterSpacing: 0.5, marginBottom: 4, display: "block" };
 
 export default function AdminApp() {
   const [authed, setAuthed] = useState(() => sessionStorage.getItem("bolodala_admin_ok") === "1");
@@ -59,7 +51,7 @@ function AdminPanel() {
   const [form, setForm] = useState({ match_date: "", home_team: "", away_team: "", home_score: "", away_score: "", status: "upcoming" });
   const [formPlayers, setFormPlayers] = useState([]);
   const [newPlayer, setNewPlayer] = useState({ side: "home", name: "", rating: 7.0, goals: 0, assists: 0 });
-  const [teamForm, setTeamForm] = useState({ name: "", logo: "⚽️" });
+  const [teamForm, setTeamForm] = useState({ name: "", logo: "⚽" });
   const [teamFormPlayers, setTeamFormPlayers] = useState([]);
   const [newTeamPlayer, setNewTeamPlayer] = useState({ name: "", position: "Hujumchi" });
   const [players, setPlayers] = useState([]);
@@ -97,7 +89,7 @@ function AdminPanel() {
       away_team: m.away_team,
       home_score: m.home_score ?? "",
       away_score: m.away_score ?? "",
-      status: forceStatus || m.status,
+      status: forceStatus ? forceStatus : m.status,
     });
     setFormPlayers(allMatchPlayers.filter((p) => p.match_id === m.id));
   }
@@ -120,16 +112,10 @@ function AdminPanel() {
       )
     );
   }
- async function saveMatch() {
-    if (!form.home_team) {
-      alert("Sana va ikkala jamoani tanlang");
-      return;
-    }
-    if (!form.away_team) {
-      alert("Sana va ikkala jamoani tanlang");
-      return;
-    }
-    if (!form.match_date) {
+
+  async function saveMatch() {
+    // Shart tekshiruvlari bitta joyga yig'ildi va optimallashdi
+    if (!form.home_team || !form.away_team || !form.match_date) {
       alert("Sana va ikkala jamoani tanlang");
       return;
     }
@@ -176,7 +162,7 @@ function AdminPanel() {
     }
 
     const { data: freshMatches } = await supabase.from("matches").select("*");
-    await syncTeamStandings(freshMatches || []);
+    await syncTeamStandings(freshMatches ? freshMatches : []);
 
     setSaving(false);
     startNewMatch();
@@ -187,9 +173,9 @@ function AdminPanel() {
     if (!confirm("Ushbu o'yinni o'chirishga ishonchingiz komilmi?")) return;
     await supabase.from("matches").delete().eq("id", id);
     const { data: freshMatches } = await supabase.from("matches").select("*");
-    await syncTeamStandings(freshMatches || []);
+    await syncTeamStandings(freshMatches ? freshMatches : []);
     loadAll();
-  } 
+  }
 
   function addPlayerToForm() {
     if (!newPlayer.name) return;
@@ -216,9 +202,10 @@ function AdminPanel() {
 
   async function addTeam() {
     if (!teamForm.name) return;
+    const logoValue = teamForm.logo ? teamForm.logo : "⚽";
     const { data, error } = await supabase
       .from("teams")
-      .insert({ name: teamForm.name, logo: teamForm.logo || "⚽️" })
+      .insert({ name: teamForm.name, logo: logoValue })
       .select()
       .single();
     if (error) {
@@ -230,7 +217,7 @@ function AdminPanel() {
         teamFormPlayers.map((p) => ({ team_id: data.id, name: p.name, position: p.position }))
       );
     }
-    setTeamForm({ name: "", logo: "⚽️" });
+    setTeamForm({ name: "", logo: "⚽" });
     setTeamFormPlayers([]);
     loadAll();
   }
@@ -250,7 +237,7 @@ function AdminPanel() {
 
   return (
     <div style={{ background: "linear-gradient(135deg, #0f2235 0%, #132840 100%)", borderRadius: 12, border: "2px solid #e74c3c", overflow: "hidden" }}>
- <div style={{ background: "#e74c3c", padding: "12px 20px", display: "flex", alignItems: "center", gap: 8 }}>
+      <div style={{ background: "#e74c3c", padding: "12px 20px", display: "flex", alignItems: "center", gap: 8 }}>
         <span style={{ fontSize: 18 }}>🔐</span>
         <span style={{ color: "#fff", fontWeight: 800, fontSize: 15 }}>ADMIN PANELI</span>
       </div>
@@ -271,7 +258,7 @@ function AdminPanel() {
               cursor: "pointer",
             }}
           >
-            {t === "match" ? "⚽️ O'yin boshqaruvi" : "👥 Jamoalar"}
+            {t === "match" ? "⚽ O'yin boshqaruvi" : "👥 Jamoalar"}
           </button>
         ))}
       </div>
@@ -297,7 +284,7 @@ function AdminPanel() {
                       ✏️
                     </button>
                     <button onClick={() => deleteMatch(m.id)} style={{ background: "#2a4060", color: "#e74c3c", border: "none", borderRadius: 6, padding: "4px 10px", fontSize: 11, cursor: "pointer", fontWeight: 700 }}>
-                      🗑
+                      🗑️
                     </button>
                   </div>
                 </div>
@@ -314,10 +301,10 @@ function AdminPanel() {
                   </span>
                   <div style={{ display: "flex", gap: 6 }}>
                     <button onClick={() => startEditMatch(m)} style={{ background: "#2a4060", color: "#E8F0F8", border: "none", borderRadius: 6, padding: "4px 10px", fontSize: 11, cursor: "pointer", fontWeight: 700 }}>
- ✏️
+                      ✏️
                     </button>
                     <button onClick={() => deleteMatch(m.id)} style={{ background: "#2a4060", color: "#e74c3c", border: "none", borderRadius: 6, padding: "4px 10px", fontSize: 11, cursor: "pointer", fontWeight: 700 }}>
-                      🗑
+                      🗑️
                     </button>
                   </div>
                 </div>
@@ -384,8 +371,8 @@ function AdminPanel() {
                     <div>
                       <label style={labelStyle}>TOMON</label>
                       <select style={inputStyle} value={newPlayer.side} onChange={(e) => setNewPlayer((p) => ({ ...p, side: e.target.value }))}>
-                        <option value="home">{form.home_team || "Uy"}</option>
- <option value="away">{form.away_team || "Mehmon"}</option>
+                        <option value="home">{form.home_team ? form.home_team : "Uy"}</option>
+                        <option value="away">{form.away_team ? form.away_team : "Mehmon"}</option>
                       </select>
                     </div>
                     <div>
@@ -413,8 +400,8 @@ function AdminPanel() {
                   </div>
 
                   {[
-                    { side: "home", label: form.home_team || "Uy" },
-                    { side: "away", label: form.away_team || "Mehmon" },
+                    { side: "home", label: form.home_team },
+                    { side: "away", label: form.away_team },
                   ].map(
                     (s) =>
                       formPlayers.filter((p) => p.side === s.side).length > 0 && (
@@ -426,7 +413,7 @@ function AdminPanel() {
                             .map((p) => (
                               <div key={p.idx} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#0a1a2a", borderRadius: 6, padding: "6px 12px", marginBottom: 4 }}>
                                 <span style={{ color: "#e8f0f8", fontSize: 12 }}>
-                                  {p.name} — ⭐️{p.rating} ⚽️{p.goals} 🎯{p.assists}
+                                  {p.name} — ⭐{p.rating} ⚽{p.goals} 🎯{p.assists}
                                 </span>
                                 <button onClick={() => removePlayerFromForm(p.idx)} style={{ background: "none", border: "none", color: "#e74c3c", cursor: "pointer", fontSize: 14 }}>
                                   ✕
@@ -439,7 +426,7 @@ function AdminPanel() {
                 </div>
               )}
 
-              <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
+              <div style={{ display: "flex", gap: 10 }}>
                 <button
                   onClick={saveMatch}
                   disabled={saving}
@@ -447,7 +434,7 @@ function AdminPanel() {
                 >
                   {saving ? "SAQLANMOQDA..." : editingMatchId ? "✅ SAQLASH" : "➕ QO'SHISH"}
                 </button>
- {editingMatchId && (
+                {editingMatchId && (
                   <button onClick={startNewMatch} style={{ background: "#2a4060", color: "#7a9bb5", border: "none", borderRadius: 8, padding: "12px 20px", cursor: "pointer", fontWeight: 700 }}>
                     Bekor
                   </button>
@@ -467,7 +454,7 @@ function AdminPanel() {
                     <span style={{ color: "#e8f0f8", fontSize: 13, flex: 1, marginLeft: 10 }}>{t.name}</span>
                     <span style={{ color: "#4a7090", fontSize: 12, marginRight: 10 }}>{t.points} ball</span>
                     <button onClick={() => deleteTeam(t.id)} style={{ background: "none", border: "none", color: "#e74c3c", cursor: "pointer", fontSize: 14 }}>
-                      🗑
+                      🗑️
                     </button>
                   </div>
                   {players.filter((p) => p.team_id === t.id).length > 0 && (
@@ -485,7 +472,6 @@ function AdminPanel() {
                 </div>
               ))}
             </div>
-            
             <div style={{ borderTop: "1px solid #1e3a55", paddingTop: 16 }}>
               <div style={{ color: "#E8F0F8", fontWeight: 800, fontSize: 13, marginBottom: 12 }}>➕ YANGI JAMOA</div>
               <div style={{ display: "grid", gridTemplateColumns: "60px 1fr", gap: 10, marginBottom: 12 }}>
@@ -508,7 +494,7 @@ function AdminPanel() {
                 <div>
                   <label style={labelStyle}>POZITSIYA</label>
                   <select style={inputStyle} value={newTeamPlayer.position} onChange={(e) => setNewTeamPlayer((p) => ({ ...p, position: e.target.value }))}>
-<option value="Darvozabon">Darvozabon</option>
+                    <option value="Darvozabon">Darvozabon</option>
                     <option value="Himoyachi">Himoyachi</option>
                     <option value="Yarim himoyachi">Yarim himoyachi</option>
                     <option value="Hujumchi">Hujumchi</option>
@@ -521,7 +507,7 @@ function AdminPanel() {
                   </button>
                 </div>
               </div>
-              
+
               {teamFormPlayers.length > 0 && (
                 <div style={{ marginBottom: 12 }}>
                   {teamFormPlayers.map((p, i) => (
