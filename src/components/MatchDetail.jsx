@@ -25,7 +25,7 @@ export default function MatchDetail({ match, players, onClose }) {
           borderRadius: 16,
           width: "100%",
           maxWidth: 600,
-          border: "1px solid #00D4AA",
+          border: "1px solid #E8F0F8",
           maxHeight: "90vh",
           overflowY: "auto",
         }}
@@ -39,7 +39,7 @@ export default function MatchDetail({ match, players, onClose }) {
           }}
         >
           <div>
-            <div style={{ color: "#00D4AA", fontWeight: 800, fontSize: 18 }}>
+            <div style={{ color: "#E8F0F8", fontWeight: 800, fontSize: 18 }}>
               {match.home_team} {match.home_score}:{match.away_score} {match.away_team}
             </div>
             <div style={{ color: "#4a7090", fontSize: 12, marginTop: 4 }}>📅 {match.match_date}</div>
@@ -83,7 +83,7 @@ export default function MatchDetail({ match, players, onClose }) {
                     borderRadius: 8,
                     marginBottom: 6,
                     background: getRatingBg(p.rating),
-                    border: '1px solid ${getRatingColor(p.rating)}22',
+                    border: 1px solid ${getRatingColor(p.rating)}22,
                   }}
                 >
                   <div>
