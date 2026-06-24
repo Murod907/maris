@@ -12,7 +12,7 @@ export default function MatchCard({ match, onSelect }) {
         cursor: finished ? "pointer" : "default",
         transition: "border-color 0.2s",
       }}
-      onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#00D4AA")}
+      onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#E8F0F8")}
       onMouseLeave={(e) => (e.currentTarget.style.borderColor = "#1e3a55")}
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
@@ -21,9 +21,9 @@ export default function MatchCard({ match, onSelect }) {
         </span>
         <span
           style={{
-            background: finished ? "rgba(0,212,170,0.1)" : "rgba(255,193,7,0.1)",
-            color: finished ? "#00D4AA" : "#FFC107",
-            border: '1px solid ${finished ? "#00D4AA" : "#FFC107"}',
+            background: finished ? "rgba(232,240,248,0.1)" : "rgba(255,193,7,0.1)",
+            color: finished ? "#E8F0F8" : "#FFC107",
+            border: 1px solid ${finished ? "#E8F0F8" : "#FFC107"},
             borderRadius: 4,
             padding: "2px 8px",
             fontSize: 10,
