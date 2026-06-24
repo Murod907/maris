@@ -1,4 +1,4 @@
- import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "../supabaseClient";
 import TopBar from "../components/TopBar";
 import MatchCard from "../components/MatchCard";
@@ -60,8 +60,8 @@ export default function PublicApp() {
           }}
         >
           <div>
-            <div style={{ color: "#00D4AA", fontWeight: 900, fontSize: 20 }}>⛰️ Bolodala Super Liga</div>
-            <div style={{ color: "#4a7090", fontSize: 12, marginTop: 2 }}>Boʻstonliq tumani • 2025 Mavsumi</div>
+            <div style={{ color: "#E8F0F8", fontWeight: 900, fontSize: 20 }}>⛰️ Bolodala Super Liga</div>
+            <div style={{ color: "#4a7090", fontSize: 12, marginTop: 2 }}>Boʻstonliq tumani • 2026 Mavsumi</div>
           </div>
           <div style={{ display: "flex", gap: 16, textAlign: "center" }}>
             <div>
