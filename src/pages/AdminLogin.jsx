@@ -6,7 +6,7 @@ export default function AdminLogin({ onSuccess }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const correctPassword = BOLODALA2026;
+    const correctPassword = "BOLODALA2026";
     if (password === correctPassword) {
       sessionStorage.setItem("bolodala_admin_ok", "1");
       onSuccess();
