@@ -463,10 +463,6 @@ function AdminPanel() {
                           <button onClick={() => deletePlayer(p.id)} style={{ background: "none", border: "none", color: "#e74c3c", cursor: "pointer", fontSize: 12 }}>
                             ✕
                           </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
