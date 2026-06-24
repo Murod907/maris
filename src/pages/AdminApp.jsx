@@ -52,17 +52,22 @@ function AdminPanel() {
   const [formPlayers, setFormPlayers] = useState([]);
   const [newPlayer, setNewPlayer] = useState({ side: "home", name: "", rating: 7.0, goals: 0, assists: 0 });
   const [teamForm, setTeamForm] = useState({ name: "", logo: "⚽" });
+  const [teamFormPlayers, setTeamFormPlayers] = useState([]);
+  const [newTeamPlayer, setNewTeamPlayer] = useState({ name: "", position: "Hujumchi" });
+  const [players, setPlayers] = useState([]);
 
   async function loadAll() {
     setLoading(true);
-    const [{ data: teamsData }, { data: matchesData }, { data: playersData }] = await Promise.all([
+    const [{ data: teamsData }, { data: matchesData }, { data: playersData }, { data: rosterData }] = await Promise.all([
       supabase.from("teams").select("*").order("name"),
       supabase.from("matches").select("*").order("match_date", { ascending: false }),
       supabase.from("match_players").select("*"),
+      supabase.from("players").select("*").order("name"),
     ]);
     setTeams(teamsData || []);
     setMatches(matchesData || []);
     setAllMatchPlayers(playersData || []);
+    setPlayers(rosterData || []);
     setLoading(false);
   }
 
@@ -108,8 +113,7 @@ function AdminPanel() {
       )
     );
   }
-
-  async function saveMatch() {
+ async function saveMatch() {
     if (!form.home_team  || !form.away_team ||  !form.match_date) {
       alert("Sana va ikkala jamoani tanlang");
       return;
@@ -118,7 +122,9 @@ function AdminPanel() {
       alert("Bir xil jamoani tanlab bo'lmaydi");
       return;
     }
-    setSaving(true);const payload = {
+    setSaving(true);
+
+    const payload = {
       match_date: form.match_date,
       home_team: form.home_team,
       away_team: form.away_team,
@@ -168,8 +174,7 @@ function AdminPanel() {
     const { data: freshMatches } = await supabase.from("matches").select("*");
     await syncTeamStandings(freshMatches || []);
     loadAll();
-  }
-
+  } 
   function addPlayerToForm() {
     if (!newPlayer.name) return;
     setFormPlayers((list) => [
@@ -183,14 +188,39 @@ function AdminPanel() {
     setFormPlayers((list) => list.filter((_, i) => i !== idx));
   }
 
+  function addPlayerToTeamForm() {
+    if (!newTeamPlayer.name) return;
+    setTeamFormPlayers((list) => [...list, { name: newTeamPlayer.name, position: newTeamPlayer.position }]);
+    setNewTeamPlayer({ name: "", position: "Hujumchi" });
+  }
+
+  function removePlayerFromTeamForm(idx) {
+    setTeamFormPlayers((list) => list.filter((_, i) => i !== idx));
+  }
+
   async function addTeam() {
     if (!teamForm.name) return;
-    const { error } = await supabase.from("teams").insert({ name: teamForm.name, logo: teamForm.logo || "⚽" });
+    const { data, error } = await supabase
+      .from("teams")
+      .insert({ name: teamForm.name, logo: teamForm.logo || "⚽" })
+      .select()
+      .single();
     if (error) {
       alert("Xatolik: " + error.message);
       return;
     }
+    if (teamFormPlayers.length > 0) {
+      await supabase.from("players").insert(
+        teamFormPlayers.map((p) => ({ team_id: data.id, name: p.name, position: p.position }))
+      );
+    }
     setTeamForm({ name: "", logo: "⚽" });
+    setTeamFormPlayers([]);
+    loadAll();
+  }
+
+  async function deletePlayer(id) {
+    await supabase.from("players").delete().eq("id", id);
     loadAll();
   }
 
@@ -210,7 +240,8 @@ function AdminPanel() {
       </div>
 
       <div style={{ display: "flex", borderBottom: "1px solid #1e3a55" }}>
-        {["match", "teams"].map((t) => ( <button
+        {["match", "teams"].map((t) => (
+          <button
             key={t}
             onClick={() => setTab(t)}
             style={{
@@ -242,7 +273,7 @@ function AdminPanel() {
                   <span style={{ color: "#e8f0f8", fontSize: 13 }}>
                     {m.home_team} vs {m.away_team} • {m.match_date}
                   </span>
-                  <div style={{ display: "flex", gap: 6 }}>
+ <div style={{ display: "flex", gap: 6 }}>
                     <button onClick={() => startEditMatch(m, "finished")} style={{ background: "#E8F0F8", color: "#0D1B2A", border: "none", borderRadius: 6, padding: "4px 10px", fontSize: 11, cursor: "pointer", fontWeight: 700 }}>
                       ✅ Tugatish
                     </button>
@@ -276,8 +307,6 @@ function AdminPanel() {
                 </div>
               ))}
             </div>
-              ))}
-            </div>
 
             <div style={{ borderTop: "1px solid #1e3a55", paddingTop: 20 }}>
               <div style={{ color: "#E8F0F8", fontWeight: 800, fontSize: 13, marginBottom: 16 }}>
@@ -301,7 +330,7 @@ function AdminPanel() {
                   <select style={inputStyle} value={form.home_team} onChange={(e) => setForm((f) => ({ ...f, home_team: e.target.value }))}>
                     <option value="">Tanlang</option>
                     {teams.map((t) => (
-                      <option key={t.id} value={t.name}>
+<option key={t.id} value={t.name}>
                         {t.name}
                       </option>
                     ))}
@@ -311,7 +340,7 @@ function AdminPanel() {
                   <label style={labelStyle}>MEHMON JAMOA</label>
                   <select style={inputStyle} value={form.away_team} onChange={(e) => setForm((f) => ({ ...f, away_team: e.target.value }))}>
                     <option value="">Tanlang</option>
- {teams.map((t) => (
+                    {teams.map((t) => (
                       <option key={t.id} value={t.name}>
                         {t.name}
                       </option>
@@ -347,6 +376,7 @@ function AdminPanel() {
                       <label style={labelStyle}>ISM</label>
                       <input style={inputStyle} value={newPlayer.name} onChange={(e) => setNewPlayer((p) => ({ ...p, name: e.target.value }))} placeholder="Ism Familiya" />
                     </div>
+                    </div>
                     <div>
                       <label style={labelStyle}>BALL</label>
                       <input type="number" step={0.1} min={1} max={10} style={inputStyle} value={newPlayer.rating} onChange={(e) => setNewPlayer((p) => ({ ...p, rating: e.target.value }))} />
@@ -375,7 +405,7 @@ function AdminPanel() {
                       formPlayers.filter((p) => p.side === s.side).length > 0 && (
                         <div key={s.side} style={{ marginTop: 10 }}>
                           <div style={{ color: "#4a7090", fontSize: 11, marginBottom: 6 }}>{s.label}</div>
-{formPlayers
+                          {formPlayers
                             .map((p, i) => ({ ...p, idx: i }))
                             .filter((p) => p.side === s.side)
                             .map((p) => (
@@ -415,20 +445,34 @@ function AdminPanel() {
         {tab === "teams" && (
           <>
             <div style={{ marginBottom: 20 }}>
-              {teams.map((t) => (
-                <div key={t.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#0a1a2a", borderRadius: 8, padding: "10px 14px", marginBottom: 6 }}>
-                  <span style={{ fontSize: 20 }}>{t.logo}</span>
-                  <span style={{ color: "#e8f0f8", fontSize: 13, flex: 1, marginLeft: 10 }}>{t.name}</span>
-                  <span style={{ color: "#4a7090", fontSize: 12, marginRight: 10 }}>{t.points} ball</span>
-                  <button onClick={() => deleteTeam(t.id)} style={{ background: "none", border: "none", color: "#e74c3c", cursor: "pointer", fontSize: 14 }}>
-                    🗑️
-                  </button>
+ {teams.map((t) => (
+                <div key={t.id} style={{ background: "#0a1a2a", borderRadius: 8, padding: "10px 14px", marginBottom: 6 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span style={{ fontSize: 20 }}>{t.logo}</span>
+                    <span style={{ color: "#e8f0f8", fontSize: 13, flex: 1, marginLeft: 10 }}>{t.name}</span>
+                    <span style={{ color: "#4a7090", fontSize: 12, marginRight: 10 }}>{t.points} ball</span>
+                    <button onClick={() => deleteTeam(t.id)} style={{ background: "none", border: "none", color: "#e74c3c", cursor: "pointer", fontSize: 14 }}>
+                      🗑️
+                    </button>
+                  </div>
+                  {players.filter((p) => p.team_id === t.id).length > 0 && (
+                    <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px solid #1e3a55" }}>
+                      {players.filter((p) => p.team_id === t.id).map((p) => (
+                        <div key={p.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "4px 0" }}>
+                          <span style={{ color: "#7a9bb5", fontSize: 12 }}>{p.name} — {p.position}</span>
+                          <button onClick={() => deletePlayer(p.id)} style={{ background: "none", border: "none", color: "#e74c3c", cursor: "pointer", fontSize: 12 }}>
+                            ✕
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
             <div style={{ borderTop: "1px solid #1e3a55", paddingTop: 16 }}>
               <div style={{ color: "#E8F0F8", fontWeight: 800, fontSize: 13, marginBottom: 12 }}>➕ YANGI JAMOA</div>
-              <div style={{ display: "grid", gridTemplateColumns: "60px 1fr auto", gap: 10, alignItems: "end" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "60px 1fr", gap: 10, marginBottom: 12 }}>
                 <div>
                   <label style={labelStyle}>EMOJI</label>
                   <input style={inputStyle} value={teamForm.logo} onChange={(e) => setTeamForm((f) => ({ ...f, logo: e.target.value }))} maxLength={2} />
@@ -437,13 +481,46 @@ function AdminPanel() {
                   <label style={labelStyle}>JAMOA NOMI</label>
                   <input style={inputStyle} value={teamForm.name} onChange={(e) => setTeamForm((f) => ({ ...f, name: e.target.value }))} placeholder="Jamoa nomi" />
                 </div>
+              </div>
+
+              <div style={{ color: "#7a9bb5", fontSize: 11, fontWeight: 700, marginBottom: 8 }}>JAMOA OʻYINCHILARI (ixtiyoriy)</div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr auto", gap: 8, alignItems: "end", marginBottom: 10 }}>
+                <div>
+                  <label style={labelStyle}>ISM</label>
+                  <input style={inputStyle} value={newTeamPlayer.name} onChange={(e) => setNewTeamPlayer((p) => ({ ...p, name: e.target.value }))} placeholder="Ism Familiya" />
+                </div>
+                <div>
+                  <label style={labelStyle}>POZITSIYA</label>
+                  <select style={inputStyle} value={newTeamPlayer.position} onChange={(e) => setNewTeamPlayer((p) => ({ ...p, position: e.target.value }))}>
+                    <option value="Darvozabon">Darvozabon</option>
+                    <option value="Himoyachi">Himoyachi</option>
+                    <option value="Yarim himoyachi">Yarim himoyachi</option>
+                    <option value="Hujumchi">Hujumchi</option>
+                  </select>
+                </div>
                 <div>
                   <label style={{ ...labelStyle, visibility: "hidden" }}>.</label>
-                  <button onClick={addTeam} style={{ background: "#E8F0F8", color: "#0D1B2A", border: "none", borderRadius: 8, padding: "10px 16px", fontWeight: 800, cursor: "pointer", fontSize: 14 }}>
- QO'SH
+                  <button onClick={addPlayerToTeamForm} style={{ background: "#E8F0F8", color: "#0D1B2A", border: "none", borderRadius: 8, padding: "10px 14px", fontWeight: 800, cursor: "pointer", fontSize: 16 }}>
+                    +
                   </button>
                 </div>
               </div>
+ {teamFormPlayers.length > 0 && (
+                <div style={{ marginBottom: 12 }}>
+                  {teamFormPlayers.map((p, i) => (
+                    <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#0a1a2a", borderRadius: 6, padding: "6px 12px", marginBottom: 4 }}>
+                      <span style={{ color: "#e8f0f8", fontSize: 12 }}>{p.name} — {p.position}</span>
+                      <button onClick={() => removePlayerFromTeamForm(i)} style={{ background: "none", border: "none", color: "#e74c3c", cursor: "pointer", fontSize: 14 }}>
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <button onClick={addTeam} style={{ width: "100%", background: "#E8F0F8", color: "#0D1B2A", border: "none", borderRadius: 8, padding: 12, fontWeight: 800, cursor: "pointer", fontSize: 14 }}>
+                ➕ JAMOANI QOʻSHISH
+              </button>
             </div>
           </>
         )}
