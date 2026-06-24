@@ -105,7 +105,7 @@ export default function PlayerStats({ allMatchPlayers, matches, teams }) {
     .slice(0, 5);
  return (
     <div>
-      <StatCard title="⚽ TOP UROVCHILAR" emptyText="Hozircha gol urilmagan" children={topScorers.map((p, i) => (
+      <StatCard title="⚽ TO'PURARLAR " emptyText="Hozircha gol urilmagan" children={topScorers.map((p, i) => (
         <Row key={p.name} rank={i + 1} name={p.name} sub={`${p.apps} o'yin`} badgeValue={p.goals} badgeColor={getRatingColor(p.avgRating)} />
       ))} />
 
