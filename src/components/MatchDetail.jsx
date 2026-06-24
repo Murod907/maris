@@ -83,7 +83,7 @@ export default function MatchDetail({ match, players, onClose }) {
                     borderRadius: 8,
                     marginBottom: 6,
                     background: getRatingBg(p.rating),
-                    border: '1px solid ${getRatingColor(p.rating)}22',
+                    border: `1px solid ${getRatingColor(p.rating)}22`,
                   }}
                 >
                   <div>
