@@ -23,7 +23,7 @@ export default function MatchCard({ match, onSelect }) {
           style={{
             background: finished ? "rgba(232,240,248,0.1)" : "rgba(255,193,7,0.1)",
             color: finished ? "#E8F0F8" : "#FFC107",
-            border: 1px solid ${finished ? "#E8F0F8" : "#FFC107"},
+            border: '1px solid ${finished ? "#E8F0F8" : "#FFC107"}',
             borderRadius: 4,
             padding: "2px 8px",
             fontSize: 10,
