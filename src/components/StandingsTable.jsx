@@ -3,7 +3,8 @@ export default function StandingsTable({ teams }) {
     if (b.points !== a.points) return b.points - a.points;
     const gdA = a.goals_for - a.goals_against;
     const gdB = b.goals_for - b.goals_against;
-    return gdB - gdA;
+    if (gdB !== gdA) return gdB - gdA;
+    return a.name.localeCompare(b.name);
   });
 
   return (
@@ -12,7 +13,7 @@ export default function StandingsTable({ teams }) {
         style={{
           padding: "14px 20px",
           borderBottom: "1px solid #1e3a55",
-          color: "#00D4AA",
+          color: "#E8F0F8",
           fontWeight: 800,
           fontSize: 14,
         }}
@@ -50,10 +51,10 @@ export default function StandingsTable({ teams }) {
                   key={team.id}
                   style={{
                     borderBottom: "1px solid #1a3050",
-                    background: highlight ? "rgba(0,212,170,0.05)" : "transparent",
+                    background: highlight ? "rgba(232,240,248,0.05)" : "transparent",
                   }}
                 >
-                  <td style={{ padding: 12, color: highlight ? "#00D4AA" : "#7a9bb5", fontWeight: 800, fontSize: 13 }}>
+                  <td style={{ padding: 12, color: highlight ? "#E8F0F8" : "#7a9bb5", fontWeight: 800, fontSize: 13 }}>
                     {idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : idx + 1}
                   </td>
                   <td style={{ padding: 12 }}>
@@ -69,7 +70,7 @@ export default function StandingsTable({ teams }) {
                         style={{
                           padding: 12,
                           textAlign: "center",
-                          color: i === 6 ? (gd > 0 ? "#00D4AA" : gd < 0 ? "#e74c3c" : "#7a9bb5") : "#7a9bb5",
+                          color: i === 6 ? (gd > 0 ? "#E8F0F8" : gd < 0 ? "#e74c3c" : "#7a9bb5") : "#7a9bb5",
                           fontSize: 13,
                           fontWeight: 600,
                         }}
@@ -81,7 +82,7 @@ export default function StandingsTable({ teams }) {
                   <td style={{ padding: 12, textAlign: "center" }}>
                     <span
                       style={{
-                        background: highlight ? "#00D4AA" : "#1e3a55",
+                        background: highlight ? "#E8F0F8" : "#1e3a55",
                         color: highlight ? "#0D1B2A" : "#e8f0f8",
                         fontWeight: 900,
                         fontSize: 15,
