@@ -25,7 +25,7 @@ export default function PlayerStats({ allMatchPlayers }) {
         style={{
           padding: "14px 20px",
           borderBottom: "1px solid #1e3a55",
-          color: "#00D4AA",
+          color: "#E8F0F8",
           fontWeight: 800,
           fontSize: 14,
         }}
@@ -41,7 +41,7 @@ export default function PlayerStats({ allMatchPlayers }) {
             justifyContent: "space-between",
             padding: "12px 20px",
             borderBottom: "1px solid #1a3050",
-            background: i === 0 ? "rgba(0,212,170,0.04)" : "transparent",
+            background: i === 0 ? "rgba(232,240,248,0.04)" : "transparent",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
