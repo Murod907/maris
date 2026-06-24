@@ -121,8 +121,18 @@ function AdminPanel() {
     );
   }
  async function saveMatch() {
-    if (!form.home_team | !form.away_team | !form.match_date) {
+    if (!form.home_team) {
       alert("Sana va ikkala jamoani tanlang");
+      return;
+    }
+    if (!form.away_team) {
+      alert("Sana va ikkala jamoani tanlang");
+      return;
+    }
+    if (!form.match_date) {
+      alert("Sana va ikkala jamoani tanlang");
+      return;
+    }
       return;
     }
     if (form.home_team === form.away_team) {
