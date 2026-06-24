@@ -110,7 +110,7 @@ function AdminPanel() {
   }
 
   async function saveMatch() {
-   if (!form.home_team || !form.away_team || !form.match_date) {
+    if (!form.home_team  || !form.away_team ||  !form.match_date) {
       alert("Sana va ikkala jamoani tanlang");
       return;
     }
@@ -118,8 +118,7 @@ function AdminPanel() {
       alert("Bir xil jamoani tanlab bo'lmaydi");
       return;
     }
-    setSaving(true);
- const payload = {
+    setSaving(true);const payload = {
       match_date: form.match_date,
       home_team: form.home_team,
       away_team: form.away_team,
@@ -217,7 +216,7 @@ function AdminPanel() {
             style={{
               flex: 1,
               background: tab === t ? "#1e3a55" : "transparent",
-              color: tab === t ? "#00D4AA" : "#4a7090",
+              color: tab === t ? "#E8F0F8" : "#4a7090",
               border: "none",
               padding: 12,
               fontSize: 13,
@@ -242,7 +241,7 @@ function AdminPanel() {
                     {m.home_team} vs {m.away_team} • {m.match_date}
                   </span>
                   <div style={{ display: "flex", gap: 6 }}>
-                    <button onClick={() => startEditMatch(m)} style={{ background: "#2a4060", color: "#00D4AA", border: "none", borderRadius: 6, padding: "4px 10px", fontSize: 11, cursor: "pointer", fontWeight: 700 }}>
+                    <button onClick={() => startEditMatch(m)} style={{ background: "#2a4060", color: "#E8F0F8", border: "none", borderRadius: 6, padding: "4px 10px", fontSize: 11, cursor: "pointer", fontWeight: 700 }}>
                       ✏️
                     </button>
                     <button onClick={() => deleteMatch(m.id)} style={{ background: "#2a4060", color: "#e74c3c", border: "none", borderRadius: 6, padding: "4px 10px", fontSize: 11, cursor: "pointer", fontWeight: 700 }}>
@@ -254,7 +253,7 @@ function AdminPanel() {
             </div>
 
             <div style={{ borderTop: "1px solid #1e3a55", paddingTop: 20 }}>
-              <div style={{ color: "#00D4AA", fontWeight: 800, fontSize: 13, marginBottom: 16 }}>
+              <div style={{ color: "#E8F0F8", fontWeight: 800, fontSize: 13, marginBottom: 16 }}>
                 {editingMatchId ? "✏️ O'YINNI TAHRIRLASH" : "➕ YANGI O'YIN QO'SHISH"}
               </div>
 
@@ -335,7 +334,7 @@ function AdminPanel() {
                     </div>
                     <div>
                       <label style={{ ...labelStyle, visibility: "hidden" }}>.</label>
-                      <button onClick={addPlayerToForm} style={{ background: "#00D4AA", color: "#0D1B2A", border: "none", borderRadius: 8, padding: "10px 14px", fontWeight: 800, cursor: "pointer", fontSize: 16 }}>
+                      <button onClick={addPlayerToForm} style={{ background: "#E8F0F8", color: "#0D1B2A", border: "none", borderRadius: 8, padding: "10px 14px", fontWeight: 800, cursor: "pointer", fontSize: 16 }}>
                         +
                       </button>
                     </div>
@@ -349,7 +348,7 @@ function AdminPanel() {
                       formPlayers.filter((p) => p.side === s.side).length > 0 && (
                         <div key={s.side} style={{ marginTop: 10 }}>
                           <div style={{ color: "#4a7090", fontSize: 11, marginBottom: 6 }}>{s.label}</div>
- {formPlayers
+{formPlayers
                             .map((p, i) => ({ ...p, idx: i }))
                             .filter((p) => p.side === s.side)
                             .map((p) => (
@@ -372,7 +371,7 @@ function AdminPanel() {
                 <button
                   onClick={saveMatch}
                   disabled={saving}
-                  style={{ flex: 1, background: "#00D4AA", color: "#0D1B2A", border: "none", borderRadius: 8, padding: 12, fontWeight: 800, cursor: saving ? "not-allowed" : "pointer", fontSize: 14, opacity: saving ? 0.6 : 1 }}
+                  style={{ flex: 1, background: "#E8F0F8", color: "#0D1B2A", border: "none", borderRadius: 8, padding: 12, fontWeight: 800, cursor: saving ? "not-allowed" : "pointer", fontSize: 14, opacity: saving ? 0.6 : 1 }}
                 >
                   {saving ? "SAQLANMOQDA..." : editingMatchId ? "✅ SAQLASH" : "➕ QO'SHISH"}
                 </button>
@@ -401,7 +400,7 @@ function AdminPanel() {
               ))}
             </div>
             <div style={{ borderTop: "1px solid #1e3a55", paddingTop: 16 }}>
-              <div style={{ color: "#00D4AA", fontWeight: 800, fontSize: 13, marginBottom: 12 }}>➕ YANGI JAMOA</div>
+              <div style={{ color: "#E8F0F8", fontWeight: 800, fontSize: 13, marginBottom: 12 }}>➕ YANGI JAMOA</div>
               <div style={{ display: "grid", gridTemplateColumns: "60px 1fr auto", gap: 10, alignItems: "end" }}>
                 <div>
                   <label style={labelStyle}>EMOJI</label>
@@ -413,7 +412,7 @@ function AdminPanel() {
                 </div>
                 <div>
                   <label style={{ ...labelStyle, visibility: "hidden" }}>.</label>
-                  <button onClick={addTeam} style={{ background: "#00D4AA", color: "#0D1B2A", border: "none", borderRadius: 8, padding: "10px 16px", fontWeight: 800, cursor: "pointer", fontSize: 14 }}>
+                  <button onClick={addTeam} style={{ background: "#E8F0F8", color: "#0D1B2A", border: "none", borderRadius: 8, padding: "10px 16px", fontWeight: 800, cursor: "pointer", fontSize: 14 }}>
  QO'SH
                   </button>
                 </div>
