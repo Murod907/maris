@@ -283,11 +283,10 @@ function AdminPanel() {
                     <button onClick={() => deleteMatch(m.id)} style={{ background: "#2a4060", color: "#e74c3c", border: "none", borderRadius: 6, padding: "4px 10px", fontSize: 11, cursor: "pointer", fontWeight: 700 }}>
                       🗑️
                     </button>
-                  </div>
                 </div>
               ))}
 
-              <div style={{ color: "#7a9bb5", fontSize: 11, fontWeight: 700, marginBottom: 8, marginTop: 16 }}>TUGAGAN O'YINLAR</div>
+                {(<div style={{ color: "#7a9bb5", fontSize: 11, fontWeight: 700, marginBottom: 8, marginTop: 16 }}>TUGAGAN O'YINLAR</div>
               {matches.filter((m) => m.status === "finished").length === 0 && (
                 <div style={{ color: "#4a7090", fontSize: 13 }}>Hali tugagan o'yin yo'q</div>
               )}
