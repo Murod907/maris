@@ -76,7 +76,7 @@ function AdminPanel() {
     setFormPlayers([]);
   }
 
-  function startEditMatch(m) {
+  function startEditMatch(m, forceStatus) {
     setEditingMatchId(m.id);
     setForm({
       match_date: m.match_date,
@@ -84,7 +84,7 @@ function AdminPanel() {
       away_team: m.away_team,
       home_score: m.home_score ?? "",
       away_score: m.away_score ?? "",
-      status: m.status,
+      status: forceStatus || m.status,
     });
     setFormPlayers(allMatchPlayers.filter((p) => p.match_id === m.id));
   }
@@ -233,12 +233,37 @@ function AdminPanel() {
         {tab === "match" && (
           <>
             <div style={{ marginBottom: 20 }}>
-              <div style={{ color: "#7a9bb5", fontSize: 11, fontWeight: 700, marginBottom: 8 }}>MAVJUD O'YINLAR</div>
-              {matches.length === 0 && <div style={{ color: "#4a7090", fontSize: 13 }}>Hali o'yin yo'q</div>}
-              {matches.map((m) => (
+              <div style={{ color: "#FFC107", fontSize: 11, fontWeight: 700, marginBottom: 8 }}>KUTILMOQDA</div>
+              {matches.filter((m) => m.status === "upcoming").length === 0 && (
+                <div style={{ color: "#4a7090", fontSize: 13, marginBottom: 12 }}>Kutilayotgan o'yin yo'q</div>
+              )}
+              {matches.filter((m) => m.status === "upcoming").map((m) => (
                 <div key={m.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#0a1a2a", borderRadius: 8, padding: "10px 14px", marginBottom: 6 }}>
                   <span style={{ color: "#e8f0f8", fontSize: 13 }}>
                     {m.home_team} vs {m.away_team} • {m.match_date}
+                  </span>
+                  <div style={{ display: "flex", gap: 6 }}>
+                    <button onClick={() => startEditMatch(m, "finished")} style={{ background: "#E8F0F8", color: "#0D1B2A", border: "none", borderRadius: 6, padding: "4px 10px", fontSize: 11, cursor: "pointer", fontWeight: 700 }}>
+                      ✅ Tugatish
+                    </button>
+                    <button onClick={() => startEditMatch(m)} style={{ background: "#2a4060", color: "#E8F0F8", border: "none", borderRadius: 6, padding: "4px 10px", fontSize: 11, cursor: "pointer", fontWeight: 700 }}>
+                      ✏️
+                    </button>
+                    <button onClick={() => deleteMatch(m.id)} style={{ background: "#2a4060", color: "#e74c3c", border: "none", borderRadius: 6, padding: "4px 10px", fontSize: 11, cursor: "pointer", fontWeight: 700 }}>
+                      🗑️
+                    </button>
+                  </div>
+                </div>
+              ))}
+
+              <div style={{ color: "#7a9bb5", fontSize: 11, fontWeight: 700, marginBottom: 8, marginTop: 16 }}>TUGAGAN O'YINLAR</div>
+              {matches.filter((m) => m.status === "finished").length === 0 && (
+                <div style={{ color: "#4a7090", fontSize: 13 }}>Hali tugagan o'yin yo'q</div>
+              )}
+              {matches.filter((m) => m.status === "finished").map((m) => (
+                <div key={m.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#0a1a2a", borderRadius: 8, padding: "10px 14px", marginBottom: 6 }}>
+                  <span style={{ color: "#e8f0f8", fontSize: 13 }}>
+                    {m.home_team} {m.home_score}:{m.away_score} {m.away_team} • {m.match_date}
                   </span>
                   <div style={{ display: "flex", gap: 6 }}>
                     <button onClick={() => startEditMatch(m)} style={{ background: "#2a4060", color: "#E8F0F8", border: "none", borderRadius: 6, padding: "4px 10px", fontSize: 11, cursor: "pointer", fontWeight: 700 }}>
@@ -249,6 +274,8 @@ function AdminPanel() {
                     </button>
                   </div>
                 </div>
+              ))}
+            </div>
               ))}
             </div>
 
