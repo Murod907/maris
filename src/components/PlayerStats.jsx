@@ -106,15 +106,15 @@ export default function PlayerStats({ allMatchPlayers, matches, teams }) {
  return (
     <div>
       <StatCard title="⚽ TOP UROVCHILAR" emptyText="Hozircha gol urilmagan" children={topScorers.map((p, i) => (
-        <Row key={p.name} rank={i + 1} name={p.name} sub={${p.apps} o'yin} badgeValue={p.goals} badgeColor={getRatingColor(p.avgRating)} />
+        <Row key={p.name} rank={i + 1} name={p.name} sub={'${p.apps} o'yin'} badgeValue={p.goals} badgeColor={getRatingColor(p.avgRating)} />
       ))} />
 
       <StatCard title="🎯 ASSISTENTLAR" emptyText="Hozircha assist berilmagan" children={topAssisters.map((p, i) => (
-        <Row key={p.name} rank={i + 1} name={p.name} sub={${p.apps} o'yin} badgeValue={p.assists} badgeColor={getRatingColor(p.avgRating)} />
+        <Row key={p.name} rank={i + 1} name={p.name} sub={'${p.apps} o'yin'} badgeValue={p.assists} badgeColor={getRatingColor(p.avgRating)} />
       ))} />
 
       <StatCard title="⭐ ENG YUQORI OʻRTACHA BALL" emptyText="Hozircha ma'lumot yo'q" children={topRated.map((p, i) => (
-        <Row key={p.name} rank={i + 1} name={p.name} sub={${p.apps} o'yin} badgeValue={p.avgRating.toFixed(1)} badgeColor={getRatingColor(p.avgRating)} />
+        <Row key={p.name} rank={i + 1} name={p.name} sub${p.apps} o'yin} badgeValue={p.avgRating.toFixed(1)} badgeColor={getRatingColor(p.avgRating)} />
       ))} />
 
       <StatCard title="🛡️ ENG KOʻP QURUQ OʻYIN" emptyText="Hozircha quruq o'yin yo'q" children={topCleanSheets.map((t, i) => (
