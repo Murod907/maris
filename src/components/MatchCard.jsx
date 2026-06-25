@@ -1,33 +1,46 @@
 export default function MatchCard({ match, onSelect }) {
   const finished = match.status === "finished";
+  
   return (
     <div
       onClick={() => finished && onSelect(match)}
       style={{
-        background: "linear-gradient(135deg, #0f2235 0%, #132840 100%)",
-        border: "1px solid #1e3a55",
-        borderRadius: 12,
+        background: "#ffffff",
+        border: "1px solid #b3d4fc",
+        borderRadius: 16,
         padding: "16px 20px",
-        marginBottom: 10,
+        marginBottom: 12,
         cursor: finished ? "pointer" : "default",
-        transition: "border-color 0.2s",
+        boxShadow: "0 4px 12px rgba(0, 86, 179, 0.03)",
+        transition: "all 0.2s ease-in-out",
       }}
-      onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#E8F0F8")}
-      onMouseLeave={(e) => (e.currentTarget.style.borderColor = "#1e3a55")}
+      onMouseEnter={(e) => {
+        if (finished) {
+          e.currentTarget.style.borderColor = "#0056b3";
+          e.currentTarget.style.transform = "translateY(-2px)";
+          e.currentTarget.style.boxShadow = "0 6px 18px rgba(0, 86, 179, 0.08)";
+        }
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = "#b3d4fc";
+        e.currentTarget.style.transform = "none";
+        e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 86, 179, 0.03)";
+      }}
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-        <span style={{ color: "#4a7090", fontSize: 11, fontWeight: 600 }}>
-          📅 {match.match_date} • Bolodala maydonchasi
+        <span style={{ color: "#5a738e", fontSize: 12, fontWeight: 600 }}>
+          📅 {match.match_date} • Bolodala Arena
         </span>
         <span
           style={{
-            background: finished ? "rgba(232,240,248,0.1)" : "rgba(255,193,7,0.1)",
-            color: finished ? "#E8F0F8" : "#FFC107",
-            border: `1px solid ${finished ? "#E8F0F8" : "#FFC107"}`,
-            borderRadius: 4,
-            padding: "2px 8px",
+            background: finished ? "#e1eefc" : "#fff3cd",
+            color: finished ? "#0056b3" : "#856404",
+            border: 1px solid ${finished ? "#b3d4fc" : "#ffeeba"},
+            borderRadius: 6,
+            padding: "3px 10px",
             fontSize: 10,
-            fontWeight: 700,
+            fontWeight: 800,
+            letterSpacing: 0.5
           }}
         >
           {finished ? "TUGADI" : "KUTILMOQDA"}
@@ -36,27 +49,29 @@ export default function MatchCard({ match, onSelect }) {
 
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ flex: 1, textAlign: "right" }}>
-          <div style={{ color: "#e8f0f8", fontWeight: 800, fontSize: 16 }}>{match.home_team}</div>
+          <div style={{ color: "#0f2235", fontWeight: 800, fontSize: 16 }}>{match.home_team}</div>
         </div>
+        
         <div style={{ padding: "0 20px", textAlign: "center", minWidth: 100 }}>
           {finished ? (
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <span style={{ color: "#fff", fontWeight: 900, fontSize: 28 }}>{match.home_score}</span>
-              <span style={{ color: "#4a7090", fontSize: 18 }}>:</span>
-              <span style={{ color: "#fff", fontWeight: 900, fontSize: 28 }}>{match.away_score}</span>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}>
+              <span style={{ color: "#0f2235", fontWeight: 900, fontSize: 26 }}>{match.home_score}</span>
+              <span style={{ color: "#a0b2c6", fontSize: 20, fontWeight: 700 }}>:</span>
+              <span style={{ color: "#0f2235", fontWeight: 900, fontSize: 26 }}>{match.away_score}</span>
             </div>
           ) : (
-            <span style={{ color: "#FFC107", fontWeight: 800, fontSize: 22 }}>VS</span>
+            <span style={{ color: "#e67e22", transform: "scale(1.1)", display: "inline-block", fontWeight: 900, fontSize: 18 }}>VS</span>
           )}
         </div>
+
         <div style={{ flex: 1, textAlign: "left" }}>
-          <div style={{ color: "#e8f0f8", fontWeight: 800, fontSize: 16 }}>{match.away_team}</div>
+          <div style={{ color: "#0f2235", fontWeight: 800, fontSize: 16 }}>{match.away_team}</div>
         </div>
       </div>
 
       {finished && (
-        <div style={{ textAlign: "center", marginTop: 8, color: "#4a7090", fontSize: 11 }}>
-          Batafsil ko'rish uchun bosing →
+        <div style={{ textAlign: "center", marginTop: 12, pt: 8, borderTop: "1px dashed #edf2f7", color: "#0056b3", fontSize: 12, fontWeight: 600 }}>
+          Batafsil o'yin qaydnomasi va statistika →
         </div>
       )}
     </div>
