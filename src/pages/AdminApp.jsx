@@ -25,13 +25,14 @@ const labelStyle = {
   display: "block" 
 };
 
+// Ballarga qarab kartochka ranglarini aniqlash funksiyasi
 function getRatingColor(rating) {
   const r = Number(rating);
-  if (r >= 8.5) return "#2ecc71"; // To'q yashil (A'lo)
-  if (r >= 7.5) return "#27ae60"; // Yashil (Yaxshi)
-  if (r >= 6.5) return "#f1c40f"; // Sariq (O'rtacha)
-  if (r >= 5.5) return "#e67e22"; // Sersariq (Pastroq)
-  return "#e74c3c"; // Qizil (Yomon)
+  if (r >= 8.5) return "#2ecc71"; // To'q yashil
+  if (r >= 7.5) return "#27ae60"; // Yashil
+  if (r >= 6.5) return "#f1c40f"; // Sariq
+  if (r >= 5.5) return "#e67e22"; // To'q sariq
+  return "#e74c3c"; // Qizil
 }
 
 export default function AdminApp() {
@@ -201,13 +202,13 @@ function AdminPanel() {
     loadAll();
   }
 
+  // SEN SO'RAGAN VA TUGMANI JONLANTIRADIGAN ASOSIY FUNKSIYA
   function addPlayerToForm() {
     if (!newPlayer.player_id) {
       alert("Iltimos, ro'yxatdan o'yinchini tanlang!");
       return;
     }
     
-    // String o'tkazish orqali turlar mos kelmasligi (ID xatoligi) butunlay tuzatildi
     const targetPlayer = players.find((p) => String(p.id) === String(newPlayer.player_id));
     if (!targetPlayer) {
       alert("O'yinchi topilmadi!");
@@ -445,6 +446,7 @@ function AdminPanel() {
                       <input type="checkbox" checked={newPlayer.is_clean_sheet} onChange={(e) => setNewPlayer((p) => ({ ...p, is_clean_sheet: e.target.checked }))} style={{ width: 18, height: 18, cursor: "pointer" }} />
                     </div>
                     <div>
+                      {/* O'YINCHI QO'SHISH TUGMASI (PLYUS) */}
                       <button onClick={addPlayerToForm} style={{ background: "#0056b3", color: "#ffffff", border: "none", borderRadius: 8, padding: "10px 14px", fontWeight: 800, cursor: "pointer", fontSize: 14 }}>
                         +
                       </button>
