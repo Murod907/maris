@@ -35,7 +35,7 @@ export default function MatchCard({ match, onSelect }) {
           style={{
             background: finished ? "#e1eefc" : "#fff3cd",
             color: finished ? "#0056b3" : "#856404",
-            border: 1px solid ${finished ? "#b3d4fc" : "#ffeeba"},
+            border: finished ? "1px solid #b3d4fc" : "1px solid #ffeeba",
             borderRadius: 6,
             padding: "3px 10px",
             fontSize: 10,
