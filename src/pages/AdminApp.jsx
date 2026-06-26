@@ -422,12 +422,24 @@ function AdminPanel() {
                     </div>
                     <div>
                       <label style={labelStyle}>FUTBOLCHINI TANLANG</label>
-                      <select style={inputStyle} value={newPlayer.player_id} onChange={(e) => setNewPlayer((p) => ({ ...p, player_id: e.target.value }))}>
-                        <option value="">-- Tanlang --</option>
-                        {getPlayersForTeam(newPlayer.side === "home" ? form.home_team : form.away_team).map((p) => (
-                          <option key={p.id} value={p.id}>{p.name} ({p.position})</option>
-                        ))}
-                      </select>
+                      <select 
+  style={inputStyle} 
+  value={newPlayer.player_id || ""} 
+  onChange={(e) => {
+    const selectedId = e.target.value;
+    setNewPlayer(prev => ({
+      ...prev,
+      player_id: selectedId
+    }));
+  }}
+>
+  <option value="">-- Tanlang --</option>
+  {getPlayersForTeam(newPlayer.side === "home" ? form.home_team : form.away_team).map((p) => (
+    <option key={p.id} value={p.id}>
+      {p.name} ({p.position})
+    </option>
+  ))}
+</select>
                     </div>
                     <div>
                       <label style={labelStyle}>BALL</label>
