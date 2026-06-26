@@ -188,7 +188,6 @@ function AdminPanel() {
     const { data: freshMatches } = await supabase.from("matches").select("*");
     await syncTeamStandings(freshMatches ? freshMatches : []);
 
-    setSaving(true);
     startNewMatch();
     await loadAll();
     setSaving(false);
@@ -207,6 +206,8 @@ function AdminPanel() {
       alert("Iltimos, ro'yxatdan o'yinchini tanlang!");
       return;
     }
+    
+    // String o'tkazish orqali turlar mos kelmasligi (ID xatoligi) butunlay tuzatildi
     const targetPlayer = players.find((p) => String(p.id) === String(newPlayer.player_id));
     if (!targetPlayer) {
       alert("O'yinchi topilmadi!");
@@ -222,10 +223,11 @@ function AdminPanel() {
         rating: Number(newPlayer.rating) || 7.0,
         goals: Number(newPlayer.goals) || 0,
         assists: Number(newPlayer.assists) || 0,
-        is_clean_sheet: newPlayer.is_clean_sheet,
+        is_clean_sheet: newPlayer.is_clean_sheet || false,
       },
     ]);
-    setNewPlayer({ side: newPlayer.side, player_id: "", rating: "7.0", goals: "0", assists: "0", is_clean_sheet: false });
+    
+    setNewPlayer((p) => ({ ...p, player_id: "", rating: "7.0", goals: "0", assists: "0", is_clean_sheet: false }));
   }
 
   function removePlayerFromForm(idx) {
@@ -409,7 +411,7 @@ function AdminPanel() {
               {form.status === "finished" && form.home_team && form.away_team && (
                 <div style={{ marginBottom: 16, background: "#f0f6fc", padding: 16, borderRadius: 12, border: "1px solid #b3d4fc" }}>
                   <div style={{ color: "#0056b3", fontSize: 11, fontWeight: 700, marginBottom: 8 }}>📋 INDIVIDUAL STATISTIKA (RO'YXATDAN TANLASH)</div>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1.5fr 65px 55px 55px 75px auto", gap: 8, alignItems: "end" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1.8fr 65px 55px 55px 75px auto", gap: 8, alignItems: "end" }}>
                     <div>
                       <label style={labelStyle}>TOMON</label>
                       <select style={inputStyle} value={newPlayer.side} onChange={(e) => setNewPlayer((p) => ({ ...p, side: e.target.value, player_id: "" }))}>
@@ -450,14 +452,14 @@ function AdminPanel() {
                   </div>
 
                   {[{ side: "home", label: form.home_team }, { side: "away", label: form.away_team }].map((s) => (
-                    <div key={s.side} style={{ marginTop: 12 }}>
+                    <div key={s.side} style={{ marginTop: 16 }}>
                       <div style={{ color: "#4a7090", fontSize: 12, fontWeight: 800, marginBottom: 8, textTransform: "uppercase", letterSpacing: 0.5 }}>
-                        {s.label} o'yinchi ko'rsatkichlari:
+                        {s.label} jamoasi ko'rsatkichlari:
                       </div>
                       {formPlayers.filter((p) => p.side === s.side).length === 0 ? (
                         <div style={{ color: "#8a9eb2", fontSize: 11, fontStyle: "italic", padding: "6px 0" }}>Ushbu jamoa o'yinchilari haqida ma'lumot kiritilmagan</div>
                       ) : (
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
                           {formPlayers
                             .map((p, i) => ({ ...p, idx: i }))
                             .filter((p) => p.side === s.side)
@@ -468,27 +470,27 @@ function AdminPanel() {
                                   display: "flex", 
                                   alignItems: "center", 
                                   justifyContent: "space-between", 
-                                  padding: "12px 14px", 
+                                  padding: "10px 14px", 
                                   borderRadius: 10, 
-                                  marginBottom: 8, 
+                                  marginBottom: 6, 
                                   background: getRatingColor(p.rating),
-                                  border: `1px solid ${getRatingColor(p.rating)}22`
+                                  boxShadow: "0 2px 6px rgba(0,0,0,0.05)"
                                 }}
                               >
-                                <div style={{ color: "#ffffff", fontWeight: 700, fontSize: 14, display: "flex", alignItems: "center", gap: 6 }}>
+                                <div style={{ color: "#ffffff", fontWeight: 700, fontSize: 13, display: "flex", alignItems: "center", gap: 6 }}>
                                   <span>{p.name}</span>
                                   {p.is_clean_sheet && (
-                                    <span style={{ background: "#2ec4b6", color: "#ffffff", fontSize: 10, padding: "2px 6px", borderRadius: 4, fontWeight: 700 }}>🧤 Quruq o'yin</span>
+                                    <span style={{ background: "rgba(255,255,255,0.25)", color: "#ffffff", fontSize: 10, padding: "2px 6px", borderRadius: 4, fontWeight: 700 }}>🧤 Quruq</span>
                                   )}
                                 </div>
-                                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                                   <div style={{ color: "#ffffff", fontSize: 11, textAlign: "right" }}>
-                                    ⚽️ {p.goals || 0} gol • 🎯 {p.assists || 0} assist
+                                    ⚽️ {p.goals || 0} • 🎯 {p.assists || 0}
                                   </div>
-                                  <div style={{ background: "rgba(255,255,255,0.2)", color: "#ffffff", fontWeight: 800, fontSize: 15, borderRadius: 8, padding: "5px 10px", minWidth: 40, textAlign: "center", boxShadow: "0 2px 6px rgba(0,0,0,0.05)" }}>
+                                  <div style={{ background: "rgba(255,255,255,0.25)", color: "#ffffff", fontWeight: 800, fontSize: 14, borderRadius: 6, padding: "3px 8px", minWidth: 32, textAlign: "center" }}>
                                     {Number(p.rating).toFixed(1)}
                                   </div>
-                                  <button onClick={() => removePlayerFromForm(p.idx)} style={{ background: "none", border: "none", color: "#ffffff", cursor: "pointer", fontSize: 14, fontWeight: "bold", marginLeft: 4 }}>
+                                  <button onClick={() => removePlayerFromForm(p.idx)} style={{ background: "none", border: "none", color: "#ffffff", cursor: "pointer", fontSize: 13, fontWeight: "bold" }}>
                                     ✕
                                   </button>
                                 </div>
@@ -507,7 +509,7 @@ function AdminPanel() {
                   disabled={saving}
                   style={{ flex: 1, background: "#0056b3", color: "#ffffff", border: "none", borderRadius: 8, padding: 14, fontWeight: 800, cursor: saving ? "not-allowed" : "pointer", fontSize: 14, opacity: saving ? 0.6 : 1 }}
                 >
-                  {saving ? "SAQLANMOQDA..." : editingMatchId ? "✅ MATCHNIX SAQLASH" : "➕ O'YINNI QO'SHISH"}
+                  {saving ? "SAQLANMOQDA..." : editingMatchId ? "✅ MATCHNI SAQLASH" : "➕ O'YINNI QO'SHISH"}
                 </button>
                 {editingMatchId && (
                   <button onClick={startNewMatch} style={{ background: "#e1eefc", color: "#0056b3", border: "none", borderRadius: 8, padding: "12px 20px", cursor: "pointer", fontWeight: 700 }}>
@@ -577,6 +579,7 @@ function AdminPanel() {
                 ➕ JAMOANI TARKIBI BILAN SAQLASH
               </button>
             </div>
+            
             <div style={{ color: "#0056b3", fontSize: 11, fontWeight: 800, marginBottom: 10, letterSpacing: 0.5 }}>RO'YXATDAGI JAMOALAR REYTINGI</div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 8 }}>
               {teams.map((t) => (
