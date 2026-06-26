@@ -15,7 +15,24 @@ const inputStyle = {
   outline: "none",
   boxSizing: "border-box",
 };
-const labelStyle = { color: "#4a7090", fontSize: 11, fontWeight: 700, letterSpacing: 0.5, marginBottom: 4, display: "block" };
+
+const labelStyle = { 
+  color: "#4a7090", 
+  fontSize: 11, 
+  fontWeight: 700, 
+  letterSpacing: 0.5, 
+  marginBottom: 4, 
+  display: "block" 
+};
+
+function getRatingColor(rating) {
+  const r = Number(rating);
+  if (r >= 8.5) return "#2ecc71"; // To'q yashil (A'lo)
+  if (r >= 7.5) return "#27ae60"; // Yashil (Yaxshi)
+  if (r >= 6.5) return "#f1c40f"; // Sariq (O'rtacha)
+  if (r >= 5.5) return "#e67e22"; // Sersariq (Pastroq)
+  return "#e74c3c"; // Qizil (Yomon)
+}
 
 export default function AdminApp() {
   const [authed, setAuthed] = useState(() => sessionStorage.getItem("bolodala_admin_ok") === "1");
@@ -432,27 +449,55 @@ function AdminPanel() {
                     </div>
                   </div>
 
-                  {[{ side: "home", label: form.home_team }, { side: "away", label: form.away_team }].map(
-                    (s) =>
-                      formPlayers.filter((p) => p.side === s.side).length > 0 && (
-                        <div key={s.side} style={{ marginTop: 12 }}>
-                          <div style={{ color: "#4a7090", fontSize: 11, fontWeight: 700, marginBottom: 4 }}>{s.label} tarkibi:</div>
+                  {[{ side: "home", label: form.home_team }, { side: "away", label: form.away_team }].map((s) => (
+                    <div key={s.side} style={{ marginTop: 12 }}>
+                      <div style={{ color: "#4a7090", fontSize: 12, fontWeight: 800, marginBottom: 8, textTransform: "uppercase", letterSpacing: 0.5 }}>
+                        {s.label} o'yinchi ko'rsatkichlari:
+                      </div>
+                      {formPlayers.filter((p) => p.side === s.side).length === 0 ? (
+                        <div style={{ color: "#8a9eb2", fontSize: 11, fontStyle: "italic", padding: "6px 0" }}>Ushbu jamoa o'yinchilari haqida ma'lumot kiritilmagan</div>
+                      ) : (
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
                           {formPlayers
                             .map((p, i) => ({ ...p, idx: i }))
                             .filter((p) => p.side === s.side)
                             .map((p) => (
-                              <div key={p.idx} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#ffffff", borderRadius: 6, padding: "8px 12px", marginBottom: 4, border: "1px solid #e1eefc" }}>
-                                <span style={{ color: "#0f2235", fontSize: 12, fontWeight: 600 }}>
-                                  {p.name} — ⭐️{p.rating} | ⚽️ {p.goals} gol | 🎯 {p.assists} asist {p.is_clean_sheet && "🧤 (Quruq o'yin)"}
-                                </span>
-                                <button onClick={() => removePlayerFromForm(p.idx)} style={{ background: "none", border: "none", color: "#dc3545", cursor: "pointer", fontSize: 13, fontWeight: "bold" }}>
-                                  ✕
-                                </button>
+                              <div 
+                                key={p.idx} 
+                                style={{ 
+                                  display: "flex", 
+                                  alignItems: "center", 
+                                  justifyContent: "space-between", 
+                                  padding: "12px 14px", 
+                                  borderRadius: 10, 
+                                  marginBottom: 8, 
+                                  background: getRatingColor(p.rating),
+                                  border: `1px solid ${getRatingColor(p.rating)}22`
+                                }}
+                              >
+                                <div style={{ color: "#ffffff", fontWeight: 700, fontSize: 14, display: "flex", alignItems: "center", gap: 6 }}>
+                                  <span>{p.name}</span>
+                                  {p.is_clean_sheet && (
+                                    <span style={{ background: "#2ec4b6", color: "#ffffff", fontSize: 10, padding: "2px 6px", borderRadius: 4, fontWeight: 700 }}>🧤 Quruq o'yin</span>
+                                  )}
+                                </div>
+                                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                                  <div style={{ color: "#ffffff", fontSize: 11, textAlign: "right" }}>
+                                    ⚽️ {p.goals || 0} gol • 🎯 {p.assists || 0} assist
+                                  </div>
+                                  <div style={{ background: "rgba(255,255,255,0.2)", color: "#ffffff", fontWeight: 800, fontSize: 15, borderRadius: 8, padding: "5px 10px", minWidth: 40, textAlign: "center", boxShadow: "0 2px 6px rgba(0,0,0,0.05)" }}>
+                                    {Number(p.rating).toFixed(1)}
+                                  </div>
+                                  <button onClick={() => removePlayerFromForm(p.idx)} style={{ background: "none", border: "none", color: "#ffffff", cursor: "pointer", fontSize: 14, fontWeight: "bold", marginLeft: 4 }}>
+                                    ✕
+                                  </button>
+                                </div>
                               </div>
                             ))}
                         </div>
-                      )
-                  )}
+                      )}
+                    </div>
+                  ))}
                 </div>
               )}
 
