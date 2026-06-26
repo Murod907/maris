@@ -176,7 +176,7 @@ function AdminPanel() {
       await supabase.from("match_players").insert(
         formPlayers.map((p) => ({
           match_id: matchId,
-          player_id: p.player_id,
+          name: p.name,
           side: p.side,
           rating: parseFloat(p.rating) || 0,
           goals: parseInt(p.goals) || 0,
