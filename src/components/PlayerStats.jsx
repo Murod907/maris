@@ -53,7 +53,7 @@ function Row({ rank, name, sub, badgeValue, badgeColor }) {
 }
 
 export default function PlayerStats({ allMatchPlayers }) {
-  // ===== FAQAT TO'PURARLARNI HISOBLASH =====
+  // ===== FAQAT TO'PURARLARNL HISOBLASH =====
   const playerMap = {};
   
   (allMatchPlayers || []).forEach((p) => {
@@ -64,7 +64,7 @@ export default function PlayerStats({ allMatchPlayers }) {
     playerMap[p.name].apps += 1;
   });
 
-  // Goli bor o'yinchilarni saralash va Top-10 talikni chiqarish (xohlasang slice(0, 5) qilishung mumkin)
+  // Goli bor hamma o'yinchilarni saralash (barcha gollar ko'rinadi)
   const topScorers = Object.values(playerMap)
     .filter((p) => p.goals > 0)
     .sort((a, b) => b.goals - a.goals);
@@ -81,7 +81,7 @@ export default function PlayerStats({ allMatchPlayers }) {
             name={p.name} 
             sub={${p.apps} ta o'yinda qatnashgan} 
             badgeValue={${p.goals} ta gol} 
-            badgeColor="#2ecc71" // To'purarlar uchun chiroyli yashil rangli karta
+            badgeColor="#2ecc71" 
           />
         ))} 
       />
