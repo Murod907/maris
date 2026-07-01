@@ -79,8 +79,8 @@ export default function PlayerStats({ allMatchPlayers }) {
             key={p.name} 
             rank={i + 1} 
             name={p.name} 
-            sub={${p.apps + " ta o'yinda qatnashgan"} 
-            badgeValue={${p.goals + " ta gol"} 
+            sub={p.apps + " ta o'yinda qatnashgan"} 
+            badgeValue={p.goals + " ta gol"} 
             badgeColor="#2ecc71" 
           />
         ))} 
